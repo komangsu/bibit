@@ -12,7 +12,8 @@ import (
 )
 
 type ErrResponse struct {
-	Message string `json:"message"`
+	Response string `json:"Response"`
+	Error    string `json:"Error"`
 }
 
 func GetMovieDetail(w http.ResponseWriter, r *http.Request) {
@@ -24,15 +25,18 @@ func GetMovieDetail(w http.ResponseWriter, r *http.Request) {
 	// handle validation parameter
 	switch {
 	case imdbID == "":
-		errResponse.Message = "Missing url parameter id."
+		errResponse.Response = "False"
+		errResponse.Error = "Incorrect IMDb ID."
 		json.NewEncoder(w).Encode(errResponse)
 		return
 	case len(imdbID) != 9:
-		errResponse.Message = "Id not found."
+		errResponse.Response = "False"
+		errResponse.Error = "Incorrect IMDb ID."
 		json.NewEncoder(w).Encode(errResponse)
 		return
 	case string(imdbID[0:2]) != "tt":
-		errResponse.Message = "Id not found."
+		errResponse.Response = "False"
+		errResponse.Error = "Incorrect IMDb ID."
 		json.NewEncoder(w).Encode(errResponse)
 		return
 	}
