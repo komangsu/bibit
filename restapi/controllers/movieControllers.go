@@ -20,8 +20,19 @@ func GetMovieDetail(w http.ResponseWriter, r *http.Request) {
 	// get param
 	imdbID := strings.TrimPrefix(r.URL.Path, "/detail-movie/")
 	errResponse := ErrResponse{}
-	if imdbID == "" {
+
+	// handle validation parameter
+	switch {
+	case imdbID == "":
 		errResponse.Message = "Missing url parameter id."
+		json.NewEncoder(w).Encode(errResponse)
+		return
+	case len(imdbID) != 9:
+		errResponse.Message = "Id not found."
+		json.NewEncoder(w).Encode(errResponse)
+		return
+	case string(imdbID[0:2]) != "tt":
+		errResponse.Message = "Id not found."
 		json.NewEncoder(w).Encode(errResponse)
 		return
 	}
